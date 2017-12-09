@@ -1,5 +1,17 @@
 <resources>
-    <string name="app_name">FilmesFamosos</string>
+    <string name="app_name">Pop Movies</string>
+    <string name="detail_movie">MovieDetail</string>
+
+    <!--menu-->
+    <string name="most_popular">Most Popular</string>
+    <string name="top_rated">Top Rated</string>
+
+    <!--string test-->
+    <string name="test_title">MovieDetail</string>
+    <string name="test_year">MovieDetail</string>
+    <string name="test_min">MovieDetail</string>
+    <string name="test_rating">MovieDetail</string>
+    <string name="test_synopsis">MovieDetail</string>
 
     <string name="error_message">
         An error has occurred. Please try again by clicking REFRESH
