@@ -9,21 +9,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterViewHolder>{
+import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.MovieResult;
+import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.NetworkUtils;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterViewHolder> {
 
     private final Context mContext;
-    private String[] mFilmData;
+    private ArrayList<MovieResult> mFilmData;
 
     private final FilmAdapterOnClickHandler mClickHandler;
 
-    public FilmAdapter(Context context,FilmAdapterOnClickHandler clickHandler){
+    public FilmAdapter(Context context, FilmAdapterOnClickHandler clickHandler) {
         mContext = context;
         mClickHandler = clickHandler;
     }
 
 
     public interface FilmAdapterOnClickHandler {
-        void onClick(String weatherForDay);
+        void onClick(MovieResult movie);
     }
 
     @Override
@@ -34,24 +40,28 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(layoutIdForListItem,parent,shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
         return new FilmAdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(FilmAdapterViewHolder holder, int position) {
-        String film = mFilmData[position];
+        MovieResult film = mFilmData.get(position);
 
-        holder.mFilmTextView.setImageResource(R.drawable.imagetest);
+        try {
+            Picasso.with(holder.itemView.getContext()).load(NetworkUtils.buildImageFilmUrl(film.getPosterPath()).toString()).into(holder.mFilmTextView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
-        if(mFilmData == null) return 0;
-        return  mFilmData.length;
+        if (mFilmData == null) return 0;
+        return mFilmData.size();
     }
 
-    public void setFilmData(String[] data) {
+    public void setFilmData(ArrayList<MovieResult> data) {
         mFilmData = data;
         notifyDataSetChanged();
     }
@@ -69,7 +79,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            String filmInfo = mFilmData[adapterPosition];
+            MovieResult filmInfo = mFilmData.get(adapterPosition);
             mClickHandler.onClick(filmInfo);
         }
 

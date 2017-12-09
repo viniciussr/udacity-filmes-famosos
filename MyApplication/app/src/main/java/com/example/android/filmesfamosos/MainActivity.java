@@ -2,6 +2,8 @@ package com.example.android.filmesfamosos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -16,13 +18,21 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.MovieResult;
 import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.NetworkUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URL;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String[]>,FilmAdapter.FilmAdapterOnClickHandler{
+public class MainActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<ArrayList<MovieResult>>,
+        FilmAdapter.FilmAdapterOnClickHandler {
 
-    private static final int ID_LOADER = 44;
+    private static final int FILM_MOST_POPULAR_LOADER_ID = 0;
+    private static final int FILM_TOP_RATED_LOADER_ID = 1;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -32,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private TextView mErrorMessageDisplay;
 
     private ProgressBar mLoadingIndicator;
+
+    private static String TMDB_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +59,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        filmAdapter = new FilmAdapter(this,this);
+        filmAdapter = new FilmAdapter(this, this);
         mRecyclerView.setAdapter(filmAdapter);
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
+        TMDB_API_KEY = getResources().getString(R.string.apiKey);
+
         showLoading();
 
-        getSupportLoaderManager().initLoader(ID_LOADER,null,this);
+        if (isOnline()) {
+            getSupportLoaderManager().initLoader(FILM_MOST_POPULAR_LOADER_ID, null, this);
+        } else {
+            showErrorMessage();
+        }
 
     }
 
@@ -68,12 +86,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mLoadingIndicator.setVisibility(View.VISIBLE);
     }
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
     @Override
-    public void onClick(String film) {
+    public void onClick(MovieResult movie) {
         Context context = this;
         Class detailActivity = DetailActivity.class;
         Intent intentDetailActivity = new Intent(context, detailActivity);
-        intentDetailActivity.putExtra(Intent.EXTRA_TEXT, film);
+        intentDetailActivity.putExtra(getResources().getString(R.string.intent_detail_put_extra), movie);
         startActivity(intentDetailActivity);
     }
 
@@ -92,10 +119,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int id = item.getItemId();
 
         if (id == R.id.most_popular) {
+            invalidateData();
+            getSupportLoaderManager().restartLoader(FILM_MOST_POPULAR_LOADER_ID, null, this);
             return true;
         }
 
         if (id == R.id.top_rated) {
+            invalidateData();
+            getSupportLoaderManager().restartLoader(FILM_TOP_RATED_LOADER_ID, null, this);
             return true;
         }
 
@@ -103,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
 
-    public void onLoadFinished(Loader<String[]> loader, String[] data) {
+    public void onLoadFinished(Loader<ArrayList<MovieResult>> loader, ArrayList<MovieResult> data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         filmAdapter.setFilmData(data);
         if (null == data) {
@@ -114,21 +145,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoaderReset(Loader<String[]> loader) {
-
+    public void onLoaderReset(Loader<ArrayList<MovieResult>> loader) {
+        loader = null;
     }
 
-    public Loader<String[]> onCreateLoader(int id, final Bundle loaderArgs) {
-        return new AsyncTaskLoader<String[]>(this) {
+    private void invalidateData() {
+        filmAdapter.setFilmData(null);
+    }
 
+    public Loader<ArrayList<MovieResult>> onCreateLoader(final int id, final Bundle loaderArgs) {
 
-            String[] filmData = null;
+        return new AsyncTaskLoader<ArrayList<MovieResult>>(this) {
 
+            ArrayList<MovieResult> results = new ArrayList<MovieResult>();
 
             @Override
             protected void onStartLoading() {
-                if (filmData != null) {
-                    deliverResult(filmData);
+                if (results.size() > 0) {
+                    deliverResult(results);
                 } else {
                     mLoadingIndicator.setVisibility(View.VISIBLE);
                     forceLoad();
@@ -136,18 +170,38 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
 
             @Override
-            public String[] loadInBackground() {
-
-                URL requestUrl = NetworkUtils.buildUrl("film");
+            public ArrayList<MovieResult> loadInBackground() {
 
                 try {
-                    String jsonResponse = "teste;teste";
 
-//                            NetworkUtils
-//                            .getResponseFromHttpUrl(requestUrl);
+                    URL requestUrl = null;
 
+                    switch (id){
+                        case FILM_MOST_POPULAR_LOADER_ID:
+                            requestUrl = NetworkUtils.buildFilmUrl("popular", null,TMDB_API_KEY);
+                            break;
+                        case FILM_TOP_RATED_LOADER_ID:
+                            requestUrl = NetworkUtils.buildFilmUrl("top_rated", null,TMDB_API_KEY);
+                            break;
+                    }
 
-                    return jsonResponse.split(";");
+                    String jsonResponse = NetworkUtils.getResponseFromHttpUrl(requestUrl);
+
+                    JSONObject jsonObject = new JSONObject(jsonResponse);
+                    JSONArray array = (JSONArray) jsonObject.get("results");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject jsonMovieObject = array.getJSONObject(i);
+                        MovieResult movieResult = new MovieResult(
+                                jsonMovieObject.getString("original_title"),
+                                Integer.parseInt(jsonMovieObject.getString("id")),
+                                jsonMovieObject.getString("vote_average"),
+                                jsonMovieObject.getString("poster_path"),
+                                jsonMovieObject.getString("release_date"),
+                                jsonMovieObject.getString("overview"));
+                        results.add(movieResult);
+                    }
+
+                    return results;
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
@@ -155,10 +209,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
 
 
-            public void deliverResult(String[] data) {
-                filmData = data;
-                super.deliverResult(data);
+            public void deliverResult(ArrayList<MovieResult> results) {
+                this.results = results;
+                super.deliverResult(results);
             }
+
 
         };
 

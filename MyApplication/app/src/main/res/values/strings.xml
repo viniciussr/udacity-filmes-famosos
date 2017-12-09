@@ -2,6 +2,8 @@
     <string name="app_name">Pop Movies</string>
     <string name="detail_movie">MovieDetail</string>
 
+    <string name="intent_detail_put_extra">MovieResult</string>
+
     <!--menu-->
     <string name="most_popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>

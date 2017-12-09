@@ -7,37 +7,31 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class DetailActivity extends AppCompatActivity {
+import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.MovieResult;
+import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.NetworkUtils;
+import com.squareup.picasso.Picasso;
 
-    private TextView titleFilm;
-    private ImageView filmIcon;
-    private TextView year;
-    private TextView time;
-    private TextView score;
-    private TextView synopsisFilm;
+public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        MovieResult movieResult = (MovieResult) getIntent().getSerializableExtra(getResources().getString(R.string.intent_detail_put_extra));
 
-        titleFilm = (TextView) findViewById(R.id.title_film);
-        filmIcon = (ImageView) findViewById(R.id.film_image);
-        year = (TextView) findViewById(R.id.year);
-        time = (TextView) findViewById(R.id.time);
-        score = (TextView) findViewById(R.id.score);
-        synopsisFilm = (TextView) findViewById(R.id.synopsis_film);
+        ((TextView) findViewById(R.id.title_film)).setText(movieResult.getOriginalTitle());
+        ((TextView) findViewById(R.id.year)).setText( movieResult.getReleaseDate().substring(0,4));
+        ((TextView) findViewById(R.id.score)).setText(movieResult.getVoteAverage()+"/10");
+        ((TextView) findViewById(R.id.synopsis_film)).setText(movieResult.getOverview());
 
-        titleFilm.setText("INTERSTELLAR");
-        filmIcon.setImageResource(R.drawable.imagetest);
-        year.setText("2015");
-        time.setText("120min");
-        score.setText("8/10");
-        synopsisFilm.setText("Every child comes into the world full of promise, and nome more so. he is the gifted, special, a prodigy");
+        try {
+            Picasso.with(this).load(NetworkUtils.buildImageFilmUrl(movieResult.getPosterPath()).toString()).into((ImageView) findViewById(R.id.film_image));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         getSupportActionBar().setHomeButtonEnabled(true);
-
 
     }
 
