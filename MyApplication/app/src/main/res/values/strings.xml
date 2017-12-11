@@ -16,6 +16,21 @@
     <string name="test_synopsis">MovieDetail</string>
 
     <string name="error_message">
-        An error has occurred. Please try again by clicking REFRESH
+        An error has occurred.
     </string>
+
+    <!--PATH URI MOVIE-->
+    <string name="path_popular" translatable="false">popular</string>
+    <string name="path_top_rated" translatable="false">top_rated</string>
+
+    <!--FIELDS JSON RESPONSE-->
+
+    <string name="response_results" translatable="false">results</string>
+    <string name="response_title" translatable="false">original_title</string>
+    <string name="response_id" translatable="false">id</string>
+    <string name="response_vote_average" translatable="false">vote_average</string>
+    <string name="response_poster_path" translatable="false">poster_path</string>
+    <string name="response_release_date" translatable="false">release_date</string>
+    <string name="response_overview" translatable="false">overview</string>
 </resources>
+

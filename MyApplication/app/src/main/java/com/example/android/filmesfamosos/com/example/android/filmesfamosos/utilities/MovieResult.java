@@ -1,12 +1,15 @@
 package com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by vinicius.rocha on 12/9/17.
  */
 
-public class MovieResult implements Serializable {
+public class MovieResult implements Parcelable {
 
     private String originalTitle;
     private int id;
@@ -48,4 +51,13 @@ public class MovieResult implements Serializable {
         return overview;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

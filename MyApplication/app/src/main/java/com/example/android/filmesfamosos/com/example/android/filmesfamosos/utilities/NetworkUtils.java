@@ -23,6 +23,9 @@ import java.util.Scanner;
 public class NetworkUtils {
 
 
+    private static final int READ_TIMEOUT_MILISECONDS = 10000;
+    private static final int CONNECT_TIMEOUT_MILISECONDS= 15000;
+
     public static URL buildFilmUrl(String path, String query, String key) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -49,8 +52,8 @@ public class NetworkUtils {
         InputStream stream = null;
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(10000 /* milliseconds */);
-            connection.setConnectTimeout(15000 /* milliseconds */);
+            connection.setReadTimeout(READ_TIMEOUT_MILISECONDS );
+            connection.setConnectTimeout(CONNECT_TIMEOUT_MILISECONDS);
             connection.setRequestMethod("GET");
             connection.addRequestProperty("Accept", "application/json"); // Required to get TMDB to play nicely.
             connection.setDoInput(true);

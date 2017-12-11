@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final int FILM_MOST_POPULAR_LOADER_ID = 0;
     private static final int FILM_TOP_RATED_LOADER_ID = 1;
+    private static final int POSTER_SIZE = 400;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
 
         GridLayoutManager layoutManager
-                = new GridLayoutManager(MainActivity.this, 2);
+                = new GridLayoutManager(MainActivity.this, numberOfColumns());
 
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
@@ -153,6 +155,15 @@ public class MainActivity extends AppCompatActivity implements
         filmAdapter.setFilmData(null);
     }
 
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / POSTER_SIZE;
+        if (nColumns < 2) return 2;
+        return nColumns;
+    }
+
     public Loader<ArrayList<MovieResult>> onCreateLoader(final int id, final Bundle loaderArgs) {
 
         return new AsyncTaskLoader<ArrayList<MovieResult>>(this) {
@@ -178,26 +189,26 @@ public class MainActivity extends AppCompatActivity implements
 
                     switch (id){
                         case FILM_MOST_POPULAR_LOADER_ID:
-                            requestUrl = NetworkUtils.buildFilmUrl("popular", null,TMDB_API_KEY);
+                            requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_popular), null,TMDB_API_KEY);
                             break;
                         case FILM_TOP_RATED_LOADER_ID:
-                            requestUrl = NetworkUtils.buildFilmUrl("top_rated", null,TMDB_API_KEY);
+                            requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_top_rated), null,TMDB_API_KEY);
                             break;
                     }
 
                     String jsonResponse = NetworkUtils.getResponseFromHttpUrl(requestUrl);
 
                     JSONObject jsonObject = new JSONObject(jsonResponse);
-                    JSONArray array = (JSONArray) jsonObject.get("results");
+                    JSONArray array = (JSONArray) jsonObject.get(getResources().getString(R.string.response_results));
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject jsonMovieObject = array.getJSONObject(i);
                         MovieResult movieResult = new MovieResult(
-                                jsonMovieObject.getString("original_title"),
-                                Integer.parseInt(jsonMovieObject.getString("id")),
-                                jsonMovieObject.getString("vote_average"),
-                                jsonMovieObject.getString("poster_path"),
-                                jsonMovieObject.getString("release_date"),
-                                jsonMovieObject.getString("overview"));
+                                jsonMovieObject.getString(getResources().getString(R.string.response_title)),
+                                Integer.parseInt(jsonMovieObject.getString(getResources().getString(R.string.response_id))),
+                                jsonMovieObject.getString(getResources().getString(R.string.response_vote_average)),
+                                jsonMovieObject.getString(getResources().getString(R.string.response_poster_path)),
+                                jsonMovieObject.getString(getResources().getString(R.string.response_release_date)),
+                                jsonMovieObject.getString(getResources().getString(R.string.response_overview)));
                         results.add(movieResult);
                     }
 

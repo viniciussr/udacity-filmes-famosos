@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/film_image"
-        android:layout_width="140dp"
-        android:layout_height="171dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
         android:adjustViewBounds="true"
         android:cropToPadding="false"
