@@ -18,7 +18,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        MovieResult movieResult = (MovieResult) getIntent().getSerializableExtra(getResources().getString(R.string.intent_detail_put_extra));
+        MovieResult movieResult = (MovieResult) getIntent().getExtras().getParcelable(getResources().getString(R.string.intent_detail_put_extra));
 
         ((TextView) findViewById(R.id.title_film)).setText(movieResult.getOriginalTitle());
         ((TextView) findViewById(R.id.year)).setText( movieResult.getReleaseDate().substring(0,4));
@@ -26,7 +26,8 @@ public class DetailActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.synopsis_film)).setText(movieResult.getOverview());
 
         try {
-            Picasso.with(this).load(NetworkUtils.buildImageFilmUrl(movieResult.getPosterPath()).toString()).into((ImageView) findViewById(R.id.film_image));
+            Picasso.with(this).load(NetworkUtils.buildImageFilmUrl(movieResult.getPosterPath()).toString()).placeholder(R.drawable.picasa_icon)
+                    .error(R.drawable.picasa_icon).into((ImageView) findViewById(R.id.film_image));
         } catch (Exception e) {
             e.printStackTrace();
         }

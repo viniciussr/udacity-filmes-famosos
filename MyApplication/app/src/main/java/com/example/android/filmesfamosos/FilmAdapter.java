@@ -49,8 +49,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmAdapterVie
         MovieResult film = mFilmData.get(position);
 
         try {
-            Picasso.with(holder.itemView.getContext()).load(NetworkUtils.buildImageFilmUrl(film.getPosterPath()).toString()).placeholder(R.drawable.user_placeholder)
-                    .error(R.drawable.user_placeholder_error).into(holder.mFilmTextView);
+            Picasso.with(holder.itemView.getContext()).load(NetworkUtils.buildImageFilmUrl(film.getPosterPath()).toString()).placeholder(R.drawable.picasa_icon)
+                    .error(R.drawable.picasa_icon).into(holder.mFilmTextView);
         } catch (Exception e) {
             e.printStackTrace();
         }

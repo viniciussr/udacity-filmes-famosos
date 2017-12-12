@@ -27,6 +27,45 @@ public class MovieResult implements Parcelable {
         this.overview = overview;
     }
 
+
+    private MovieResult(Parcel in){
+        this.originalTitle = in.readString();
+        this.id = in.readInt();
+        this.voteAverage = in.readString();
+        this.posterPath = in.readString();
+        this.releaseDate = in.readString();
+        this.overview = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(originalTitle);
+        dest.writeInt(id);
+        dest.writeString(voteAverage);
+        dest.writeString(posterPath);
+        dest.writeString(releaseDate);
+        dest.writeString(overview);
+
+    }
+
+
+    public static final Parcelable.Creator<MovieResult> CREATOR = new Parcelable.Creator<MovieResult>() {
+        @Override
+        public MovieResult createFromParcel(Parcel in) {
+            return new MovieResult(in);
+        }
+
+        @Override
+        public MovieResult[] newArray(int size) {
+            return new MovieResult[size];
+        }
+    };
+
     public String getOriginalTitle() {
         return originalTitle;
     }
@@ -51,13 +90,5 @@ public class MovieResult implements Parcelable {
         return overview;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
 }
