@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final int FILM_MOST_POPULAR_LOADER_ID = 0;
     private static final int FILM_TOP_RATED_LOADER_ID = 1;
     private static final int POSTER_SIZE = 400;
+    private static final int MIN_COLUMS = 2;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int nColumns = width / POSTER_SIZE;
-        if (nColumns < 2) return 2;
+        if (nColumns < MIN_COLUMS) return 2;
         return nColumns;
     }
 
@@ -187,12 +188,12 @@ public class MainActivity extends AppCompatActivity implements
 
                     URL requestUrl = null;
 
-                    switch (id){
+                    switch (id) {
                         case FILM_MOST_POPULAR_LOADER_ID:
-                            requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_popular), null,TMDB_API_KEY);
+                            requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_popular), null, TMDB_API_KEY);
                             break;
                         case FILM_TOP_RATED_LOADER_ID:
-                            requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_top_rated), null,TMDB_API_KEY);
+                            requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_top_rated), null, TMDB_API_KEY);
                             break;
                     }
 
@@ -219,16 +220,10 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
 
-
             public void deliverResult(ArrayList<MovieResult> results) {
                 this.results = results;
                 super.deliverResult(results);
             }
-
-
         };
-
-
     }
-
 }

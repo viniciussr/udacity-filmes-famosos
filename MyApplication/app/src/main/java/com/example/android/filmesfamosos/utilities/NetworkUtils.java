@@ -1,9 +1,4 @@
-package com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities;
-
-import android.net.Uri;
-import android.util.Log;
-
-import com.example.android.filmesfamosos.R;
+package com.example.android.filmesfamosos.utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Scanner;
 
 /**
  * Created by vinicius.rocha on 12/4/17.

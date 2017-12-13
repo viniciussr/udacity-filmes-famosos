@@ -1,4 +1,4 @@
-package com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities;
+package com.example.android.filmesfamosos.utilities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
