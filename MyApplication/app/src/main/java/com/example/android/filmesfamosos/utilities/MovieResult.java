@@ -3,7 +3,7 @@ package com.example.android.filmesfamosos.utilities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by vinicius.rocha on 12/9/17.
@@ -17,14 +17,19 @@ public class MovieResult implements Parcelable {
     private String posterPath;
     private String releaseDate;
     private String overview;
+    private List<TrailerResult> videos;
+    private List<ReviewResult> reviews;
 
-    public MovieResult(String originalTitle, int id, String voteAverage, String posterPath, String releaseDate, String overview) {
+
+    public MovieResult(String originalTitle, int id, String voteAverage, String posterPath, String releaseDate, String overview, List<TrailerResult> videos, List<ReviewResult> reviews) {
         this.originalTitle = originalTitle;
         this.id = id;
         this.voteAverage = voteAverage;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
         this.overview = overview;
+        this.videos = videos;
+        this.reviews = reviews;
     }
 
 
@@ -35,6 +40,8 @@ public class MovieResult implements Parcelable {
         this.posterPath = in.readString();
         this.releaseDate = in.readString();
         this.overview = in.readString();
+        this.videos = in.readArrayList(TrailerResult.class.getClassLoader());
+        this.reviews = in.readArrayList(ReviewResult.class.getClassLoader());
     }
 
     @Override
@@ -50,7 +57,8 @@ public class MovieResult implements Parcelable {
         dest.writeString(posterPath);
         dest.writeString(releaseDate);
         dest.writeString(overview);
-
+        dest.writeList(videos);
+        dest.writeList(reviews);
     }
 
 
@@ -90,5 +98,11 @@ public class MovieResult implements Parcelable {
         return overview;
     }
 
+    public List<TrailerResult> getVideos() {
+        return videos;
+    }
 
+    public List<ReviewResult> getReviews() {
+        return reviews;
+    }
 }

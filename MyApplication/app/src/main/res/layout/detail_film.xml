@@ -38,7 +38,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/score"
+        app:layout_constraintBottom_toTopOf="@+id/score"
         app:layout_constraintLeft_toRightOf="@+id/vertical_middle"
         app:layout_constraintTop_toTopOf="@+id/extra_details"
         tools:text="@string/test_year" />
@@ -50,9 +50,19 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/extra_details"
+        app:layout_constraintBottom_toTopOf="@+id/favorite"
         app:layout_constraintLeft_toRightOf="@+id/vertical_middle"
         app:layout_constraintTop_toBottomOf="@+id/year"
         tools:text="@string/test_rating" />
+
+    <ImageButton android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/extra_details"
+        app:layout_constraintLeft_toRightOf="@+id/vertical_middle"
+        app:layout_constraintTop_toBottomOf="@+id/score"
+        android:src="@drawable/star"
+        android:onClick="onToggleStar"/>
 
 </android.support.constraint.ConstraintLayout>

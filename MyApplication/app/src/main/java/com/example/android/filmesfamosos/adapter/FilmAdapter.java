@@ -1,4 +1,4 @@
-package com.example.android.filmesfamosos;
+package com.example.android.filmesfamosos.adapter;
 
 
 import android.content.Context;
@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.MovieResult;
-import com.example.android.filmesfamosos.com.example.android.filmesfamosos.utilities.NetworkUtils;
+import com.example.android.filmesfamosos.R;
+import com.example.android.filmesfamosos.utilities.MovieResult;
+import com.example.android.filmesfamosos.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

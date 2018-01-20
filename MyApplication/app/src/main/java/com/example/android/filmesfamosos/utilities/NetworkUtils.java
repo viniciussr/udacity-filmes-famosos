@@ -23,6 +23,7 @@ public class NetworkUtils {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("https://api.themoviedb.org/3/movie/");
+
         stringBuilder.append(path);
         stringBuilder.append("?api_key=" + key);
         if (query != null) {
@@ -48,7 +49,7 @@ public class NetworkUtils {
             connection.setReadTimeout(READ_TIMEOUT_MILISECONDS );
             connection.setConnectTimeout(CONNECT_TIMEOUT_MILISECONDS);
             connection.setRequestMethod("GET");
-            connection.addRequestProperty("Accept", "application/json"); // Required to get TMDB to play nicely.
+            connection.addRequestProperty("Accept", "application/json");
             connection.setDoInput(true);
             connection.connect();
 

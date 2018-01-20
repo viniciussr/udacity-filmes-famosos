@@ -15,15 +15,22 @@
     <string name="test_rating">MovieDetail</string>
     <string name="test_synopsis">MovieDetail</string>
 
+
     <string name="error_message">
         An error has occurred.
     </string>
 
+    <string name="movie_review">Movie Review</string>
+    <string name="movie_trailer">Movie Trailer</string>
+
     <!--PATH URI MOVIE-->
     <string name="path_popular" translatable="false">popular</string>
     <string name="path_top_rated" translatable="false">top_rated</string>
+    <string name="path_videos" translatable="false">videos</string>
+    <string name="path_reviews" translatable="false">reviews</string>
 
-    <!--FIELDS JSON RESPONSE-->
+
+    <!--FIELDS JSON FILM RESPONSE-->
 
     <string name="response_results" translatable="false">results</string>
     <string name="response_title" translatable="false">original_title</string>
@@ -32,5 +39,24 @@
     <string name="response_poster_path" translatable="false">poster_path</string>
     <string name="response_release_date" translatable="false">release_date</string>
     <string name="response_overview" translatable="false">overview</string>
+
+    <!--FIELDS JSON TRAILERS RESPONSE-->
+
+    <string name="trailers_id" translatable="false">id</string>
+    <string name="trailers_iso639" translatable="false">iso_639_1</string>
+    <string name="trailers_iso3166" translatable="false">iso_3166_1</string>
+    <string name="trailers_key" translatable="false">key</string>
+    <string name="trailers_name" translatable="false">name</string>
+    <string name="trailers_site" translatable="false">site</string>
+    <string name="trailers_size" translatable="false">size</string>
+    <string name="trailers_type" translatable="false">type</string>
+
+    <!--FIELDS JSON REVIEWS RESPONSE-->
+
+    <string name="reviews_id" translatable="false">id</string>
+    <string name="reviews_author" translatable="false">author</string>
+    <string name="reviews_content" translatable="false">content</string>
+    <string name="reviews_url" translatable="false">url</string>
+
 </resources>
 
