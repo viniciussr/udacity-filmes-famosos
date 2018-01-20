@@ -17,19 +17,17 @@ public class MovieResult implements Parcelable {
     private String posterPath;
     private String releaseDate;
     private String overview;
-    private List<TrailerResult> videos;
+    private List<TrailerResult> trailers;
     private List<ReviewResult> reviews;
 
 
-    public MovieResult(String originalTitle, int id, String voteAverage, String posterPath, String releaseDate, String overview, List<TrailerResult> videos, List<ReviewResult> reviews) {
+    public MovieResult(String originalTitle, int id, String voteAverage, String posterPath, String releaseDate, String overview ) {
         this.originalTitle = originalTitle;
         this.id = id;
         this.voteAverage = voteAverage;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
         this.overview = overview;
-        this.videos = videos;
-        this.reviews = reviews;
     }
 
 
@@ -40,8 +38,8 @@ public class MovieResult implements Parcelable {
         this.posterPath = in.readString();
         this.releaseDate = in.readString();
         this.overview = in.readString();
-        this.videos = in.readArrayList(TrailerResult.class.getClassLoader());
-        this.reviews = in.readArrayList(ReviewResult.class.getClassLoader());
+        this.setTrailers(in.readArrayList(TrailerResult.class.getClassLoader()));
+        this.setReviews(in.readArrayList(ReviewResult.class.getClassLoader()));
     }
 
     @Override
@@ -57,8 +55,8 @@ public class MovieResult implements Parcelable {
         dest.writeString(posterPath);
         dest.writeString(releaseDate);
         dest.writeString(overview);
-        dest.writeList(videos);
-        dest.writeList(reviews);
+        dest.writeList(getTrailers());
+        dest.writeList(getReviews());
     }
 
 
@@ -98,11 +96,20 @@ public class MovieResult implements Parcelable {
         return overview;
     }
 
-    public List<TrailerResult> getVideos() {
-        return videos;
+    public List<TrailerResult> getTrailers() {
+        return trailers;
     }
 
     public List<ReviewResult> getReviews() {
         return reviews;
+    }
+
+
+    public void setTrailers(List<TrailerResult> trailers) {
+        this.trailers = trailers;
+    }
+
+    public void setReviews(List<ReviewResult> reviews) {
+        this.reviews = reviews;
     }
 }

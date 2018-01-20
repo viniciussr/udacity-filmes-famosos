@@ -8,11 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.android.filmesfamosos.adapter.ReviewAdapter;
-import com.example.android.filmesfamosos.adapter.TrailerAdapter;
 import com.example.android.filmesfamosos.utilities.MovieResult;
 import com.example.android.filmesfamosos.utilities.NetworkUtils;
 import com.example.android.filmesfamosos.utilities.ReviewResult;
@@ -42,7 +39,7 @@ public class DetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        loadTrailers(movieResult.getVideos());
+        loadTrailers(movieResult.getTrailers());
         loadReviews(movieResult.getReviews());
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -60,17 +57,21 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void loadReviews(List<ReviewResult> reviews) {
+        LinearLayout reviewList = (LinearLayout) findViewById(R.id.review_list);
         if (reviews.size() > 0) {
-            ListView reviewList = (ListView) findViewById(R.id.review_list);
-            ReviewAdapter adapter = new ReviewAdapter(reviews, this);
-            reviewList.setAdapter(adapter);
+            for(ReviewResult review : reviews){
+                LayoutInflater inflater =(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View reviewView = inflater.inflate(R.layout.review_film, null);
+                ((TextView) reviewView.findViewById(R.id.review_author)).setText(review.getAuthor());
+                ((TextView) reviewView.findViewById(R.id.review_content)).setText(review.getContent());
+                reviewList.addView(reviewView);
+            }
         }
     }
 
     private void loadTrailers(List<TrailerResult> trailers) {
         LinearLayout trailerList = (LinearLayout) findViewById(R.id.trailer_list);
         if (trailers.size() > 0) {
-
             for(TrailerResult trailer : trailers){
                 LayoutInflater inflater =(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View trailerView = inflater.inflate(R.layout.trailer_film, null);

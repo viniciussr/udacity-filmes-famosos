@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.filmesfamosos.adapter.FilmAdapter;
+import com.example.android.filmesfamosos.task.MovieTask;
 import com.example.android.filmesfamosos.utilities.MovieResult;
 import com.example.android.filmesfamosos.utilities.NetworkUtils;
 import com.example.android.filmesfamosos.utilities.ReviewResult;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private ProgressBar mLoadingIndicator;
 
-    private static String TMDB_API_KEY;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-        TMDB_API_KEY = getResources().getString(R.string.apiKey);
+
 
         showLoading();
 
@@ -173,124 +174,18 @@ public class MainActivity extends AppCompatActivity implements
 
     public Loader<ArrayList<MovieResult>> onCreateLoader(final int id, final Bundle loaderArgs) {
 
-        return new AsyncTaskLoader<ArrayList<MovieResult>>(this) {
-
-            ArrayList<MovieResult> results = new ArrayList<MovieResult>();
-
-            @Override
-            protected void onStartLoading() {
-                if (results.size() > 0) {
-                    deliverResult(results);
-                } else {
-                    mLoadingIndicator.setVisibility(View.VISIBLE);
-                    forceLoad();
-                }
-            }
-
-            @Override
-            public ArrayList<MovieResult> loadInBackground() {
-
-                try {
-                    loadMovies();
-                    return results;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @NonNull
-            private MovieResult parseMovieResult(JSONObject jsonMovieObject, List<TrailerResult> trailers, List<ReviewResult> reviews) throws JSONException {
-                return new MovieResult(
-                        jsonMovieObject.getString(getResources().getString(R.string.response_title)),
-                        Integer.parseInt(jsonMovieObject.getString(getResources().getString(R.string.response_id))),
-                        jsonMovieObject.getString(getResources().getString(R.string.response_vote_average)),
-                        jsonMovieObject.getString(getResources().getString(R.string.response_poster_path)),
-                        jsonMovieObject.getString(getResources().getString(R.string.response_release_date)),
-                        jsonMovieObject.getString(getResources().getString(R.string.response_overview)),
-                        trailers,
-                        reviews
-                        );
-            }
-
-            private void loadMovies() throws Exception {
-                URL requestUrl = null;
-
-                switch (id) {
-                    case FILM_MOST_POPULAR_LOADER_ID:
-                        requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_popular), null, TMDB_API_KEY);
-                        break;
-                    case FILM_TOP_RATED_LOADER_ID:
-                        requestUrl = NetworkUtils.buildFilmUrl(getResources().getString(R.string.path_top_rated), null, TMDB_API_KEY);
-                        break;
-                }
+        return new MovieTask(this, id);
 
 
-                JSONObject jsonObject = new JSONObject(NetworkUtils.getResponseFromHttpUrl(requestUrl));
-                JSONArray array = (JSONArray) jsonObject.get(getResources().getString(R.string.response_results));
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject jsonMovieObject = array.getJSONObject(i);
-                    List<TrailerResult> trailers = loadTrailers(jsonMovieObject.getString(getResources().getString(R.string.response_id)));
-                    List<ReviewResult> reviews = loadReviews(jsonMovieObject.getString(getResources().getString(R.string.response_id)));
-                    MovieResult movieResult = parseMovieResult(jsonMovieObject,trailers, reviews);
-                    results.add(movieResult);
-                }
+               // AsyncTaskLoader<ArrayList<MovieResult>>(this) {
 
-            }
 
-            private List<TrailerResult> loadTrailers(String id) throws Exception {
-                URL requestUrl = null;
-                requestUrl = NetworkUtils.buildFilmUrl(id + "/" + getResources().getString(R.string.path_videos), null, TMDB_API_KEY);
 
-                JSONObject jsonObject = new JSONObject(NetworkUtils.getResponseFromHttpUrl(requestUrl));
-                JSONArray array = (JSONArray) jsonObject.get(getResources().getString(R.string.response_results));
-                List<TrailerResult> listTrailers = new ArrayList<>();
-                for (int i = 0; i < array.length(); i++) {
-                    listTrailers.add(parseTrailersResult(array.getJSONObject(i)));
-                }
-                return listTrailers;
-            }
+//
+//
+//
+//
 
-            @NonNull
-            private TrailerResult parseTrailersResult(JSONObject jsonObject) throws JSONException {
-
-                return new TrailerResult(
-                        jsonObject.getString(getResources().getString(R.string.trailers_id)),
-                        jsonObject.getString(getResources().getString(R.string.trailers_iso639)),
-                        jsonObject.getString(getResources().getString(R.string.trailers_iso3166)),
-                        jsonObject.getString(getResources().getString(R.string.trailers_key)),
-                        jsonObject.getString(getResources().getString(R.string.trailers_name)),
-                        jsonObject.getString(getResources().getString(R.string.trailers_site)),
-                        Integer.parseInt(jsonObject.getString(getResources().getString(R.string.trailers_size))),
-                        jsonObject.getString(getResources().getString(R.string.trailers_type)));
-
-            }
-
-            private List<ReviewResult> loadReviews(String id) throws Exception {
-                URL requestUrl = null;
-                requestUrl = NetworkUtils.buildFilmUrl(id + "/" + getResources().getString(R.string.path_reviews), null, TMDB_API_KEY);
-                JSONObject jsonObject = new JSONObject(NetworkUtils.getResponseFromHttpUrl(requestUrl));
-                JSONArray array = (JSONArray) jsonObject.get(getResources().getString(R.string.response_results));
-                List<ReviewResult> listTrailers = new ArrayList<>();
-                for (int i = 0; i < array.length(); i++) {
-                    listTrailers.add(parseReviewResult(array.getJSONObject(i)));
-                }
-                return listTrailers;
-            }
-
-            @NonNull
-            private ReviewResult parseReviewResult(JSONObject jsonObject) throws JSONException {
-                return new ReviewResult(
-                        jsonObject.getString(getResources().getString(R.string.reviews_id)),
-                        jsonObject.getString(getResources().getString(R.string.reviews_author)),
-                        jsonObject.getString(getResources().getString(R.string.reviews_content)),
-                        jsonObject.getString(getResources().getString(R.string.reviews_url)));
-            }
-
-            public void deliverResult(ArrayList<MovieResult> results) {
-                this.results = results;
-                super.deliverResult(results);
-            }
-        };
+      //  };
     }
 }
