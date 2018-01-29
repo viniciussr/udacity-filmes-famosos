@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * Created by vinicius.rocha on 1/20/18.
  */
 
-public class ReviewTask extends AsyncTask<String , Void, ArrayList<ReviewResult>> {
+public class ReviewTask extends AsyncTask<String , Void, String> {
 
     private static String TMDB_API_KEY;
     private MovieResult movie;
@@ -35,18 +35,20 @@ public class ReviewTask extends AsyncTask<String , Void, ArrayList<ReviewResult>
     }
 
     @Override
-    protected ArrayList<ReviewResult> doInBackground(String... params) {
+    protected String doInBackground(String... params) {
 
         try {
             URL requestUrl = null;
             requestUrl = NetworkUtils.buildFilmUrl(movie.getId() + "/" + context.getString(R.string.path_reviews), null, TMDB_API_KEY);
-            JSONObject jsonObject = new JSONObject(NetworkUtils.getResponseFromHttpUrl(requestUrl));
-            JSONArray array = (JSONArray) jsonObject.get(context.getString(R.string.response_results));
-            ArrayList<ReviewResult> listReviews = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-                listReviews.add(parseReviewResult(array.getJSONObject(i)));
-            }
-            return listReviews;
+
+            return NetworkUtils.getResponseFromHttpUrl(requestUrl);
+//            JSONObject jsonObject = new JSONObject();
+//            JSONArray array = (JSONArray) jsonObject.get(context.getString(R.string.response_results));
+//            ArrayList<String> listReviews = new ArrayList<>();
+//            for (int i = 0; i < array.length(); i++) {
+//                listReviews.add(array.);
+//            }
+//            return listReviews;
         } catch (Exception e) {
             return null;
         }
@@ -63,7 +65,7 @@ public class ReviewTask extends AsyncTask<String , Void, ArrayList<ReviewResult>
     }
 
     @Override
-    protected void onPostExecute(ArrayList<ReviewResult> results) {
+    protected void onPostExecute(String results) {
         movie.setReviews(results);
     }
 }

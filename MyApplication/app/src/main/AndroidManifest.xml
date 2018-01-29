@@ -24,6 +24,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.filmesfamosos.MainActivity" />
         </activity>
+        <provider
+            android:authorities="com.example.android.filmesfamosos"
+            android:name=".db.MovieProvider" >
+        </provider>
     </application>
 
 </manifest>

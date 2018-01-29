@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final int FILM_MOST_POPULAR_LOADER_ID = 0;
     private static final int FILM_TOP_RATED_LOADER_ID = 1;
+    private static final int FAVORITES_LOADER_ID = 2;
     private static final int POSTER_SIZE = 400;
     private static final int MIN_COLUMS = 2;
 
@@ -73,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(filmAdapter);
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-
-
 
         showLoading();
 
@@ -128,16 +127,20 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.most_popular) {
-            invalidateData();
-            getSupportLoaderManager().restartLoader(FILM_MOST_POPULAR_LOADER_ID, null, this);
-            return true;
-        }
+        switch (id){
+            case R.id.most_popular:
+                invalidateData();
+                getSupportLoaderManager().restartLoader(FILM_MOST_POPULAR_LOADER_ID, null, this);
+                return true;
+            case R.id.top_rated:
+                invalidateData();
+                getSupportLoaderManager().restartLoader(FILM_TOP_RATED_LOADER_ID, null, this);
+                return true;
+            case R.id.favorites:
+                invalidateData();
+                getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, null, this);
+                return true;
 
-        if (id == R.id.top_rated) {
-            invalidateData();
-            getSupportLoaderManager().restartLoader(FILM_TOP_RATED_LOADER_ID, null, this);
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -176,16 +179,5 @@ public class MainActivity extends AppCompatActivity implements
 
         return new MovieTask(this, id);
 
-
-               // AsyncTaskLoader<ArrayList<MovieResult>>(this) {
-
-
-
-//
-//
-//
-//
-
-      //  };
     }
 }

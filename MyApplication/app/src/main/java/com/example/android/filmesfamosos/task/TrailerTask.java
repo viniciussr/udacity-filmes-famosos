@@ -24,7 +24,7 @@ import static java.security.AccessController.getContext;
  * Created by vinicius.rocha on 1/20/18.
  */
 
-public class TrailerTask  extends AsyncTask<String , Void, ArrayList<TrailerResult>> {
+public class TrailerTask  extends AsyncTask<String , Void, String> {
     private static String TMDB_API_KEY;
     private MovieResult movie;
     private Context context;
@@ -35,19 +35,20 @@ public class TrailerTask  extends AsyncTask<String , Void, ArrayList<TrailerResu
         TMDB_API_KEY = context.getString(R.string.apiKey);
     }
 
-    protected ArrayList<TrailerResult> doInBackground(String... params) {
+    protected String doInBackground(String... params) {
 
         try{
             URL requestUrl = null;
             requestUrl = NetworkUtils.buildFilmUrl(movie.getId() + "/" + context.getString(R.string.path_videos), null, TMDB_API_KEY);
 
-            JSONObject jsonObject = new JSONObject(NetworkUtils.getResponseFromHttpUrl(requestUrl));
-            JSONArray array = (JSONArray) jsonObject.get(context.getString(R.string.response_results));
-            ArrayList<TrailerResult> listTrailers = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-                listTrailers.add(parseTrailersResult(array.getJSONObject(i)));
-            }
-            return listTrailers;
+            return NetworkUtils.getResponseFromHttpUrl(requestUrl);
+//            JSONObject jsonObject = new JSONObject();
+//            JSONArray array = (JSONArray) jsonObject.get(context.getString(R.string.response_results));
+//            ArrayList<TrailerResult> listTrailers = new ArrayList<>();
+//            for (int i = 0; i < array.length(); i++) {
+//                listTrailers.add(parseTrailersResult(array.getJSONObject(i)));
+//            }
+//            return listTrailers;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -71,7 +72,7 @@ public class TrailerTask  extends AsyncTask<String , Void, ArrayList<TrailerResu
     }
 
     @Override
-    protected void onPostExecute(ArrayList<TrailerResult> results) {
+    protected void onPostExecute(String results) {
         movie.setTrailers(results);
     }
 

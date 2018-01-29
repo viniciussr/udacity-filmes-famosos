@@ -7,6 +7,7 @@
     <!--menu-->
     <string name="most_popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="favorites">Favorites</string>
 
     <!--string test-->
     <string name="test_title">MovieDetail</string>
@@ -20,8 +21,9 @@
         An error has occurred.
     </string>
 
-    <string name="movie_review">Movie Review</string>
-    <string name="movie_trailer">Movie Trailer</string>
+    <string name="movie_review">Movie Reviews:</string>
+    <string name="movie_trailer">Movie Trailers:</string>
+    <string name="youtube_link">http://www.youtube.com/watch?v=</string>
 
     <!--PATH URI MOVIE-->
     <string name="path_popular" translatable="false">popular</string>

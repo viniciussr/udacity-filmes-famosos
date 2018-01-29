@@ -63,6 +63,6 @@
         app:layout_constraintLeft_toRightOf="@+id/vertical_middle"
         app:layout_constraintTop_toBottomOf="@+id/score"
         android:src="@drawable/star"
-        android:onClick="onToggleStar"/>
+        android:background="@color/white"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -1,7 +1,10 @@
 package com.example.android.filmesfamosos.task;
 
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.AsyncTaskLoader;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.android.filmesfamosos.R;
+import com.example.android.filmesfamosos.db.MovieContract;
 import com.example.android.filmesfamosos.utilities.MovieResult;
 import com.example.android.filmesfamosos.utilities.NetworkUtils;
 import com.example.android.filmesfamosos.utilities.ReviewResult;
@@ -18,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +37,7 @@ public class MovieTask extends AsyncTaskLoader<ArrayList<MovieResult>> {
     private static String TMDB_API_KEY;
     private static final int FILM_MOST_POPULAR_LOADER_ID = 0;
     private static final int FILM_TOP_RATED_LOADER_ID = 1;
+    private static final int FAVORITES_LOADER_ID = 2;
 
     public MovieTask(Context ctx, int sortBy) {
         super(ctx);
@@ -79,13 +85,44 @@ public class MovieTask extends AsyncTaskLoader<ArrayList<MovieResult>> {
 
         switch (sortBy) {
             case FILM_MOST_POPULAR_LOADER_ID:
-                requestUrl = NetworkUtils.buildFilmUrl(getContext().getString(R.string.path_popular), null, TMDB_API_KEY);
+                loadFromURL(NetworkUtils.buildFilmUrl(getContext().getString(R.string.path_popular), null, TMDB_API_KEY));
                 break;
             case FILM_TOP_RATED_LOADER_ID:
-                requestUrl = NetworkUtils.buildFilmUrl(getContext().getString(R.string.path_top_rated), null, TMDB_API_KEY);
+                loadFromURL(NetworkUtils.buildFilmUrl(getContext().getString(R.string.path_top_rated), null, TMDB_API_KEY));
+                break;
+            case FAVORITES_LOADER_ID:
+                loadFromDB();
                 break;
         }
+    }
 
+    private void loadFromDB(){
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        ContentResolver resolver = getContext().getContentResolver();
+        Cursor cursor = null;
+
+        try {
+            cursor = resolver.query(uri, null, null, null, null);
+
+            if (cursor.moveToFirst()){
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    MovieResult movie = new MovieResult(cursor.getString(1), cursor.getInt(0),
+                            cursor.getString(4), cursor.getString(2), cursor.getString(5),
+                            cursor.getString(3));
+
+                    movie.setReviews(cursor.getString(6));
+                    movie.setTrailers(cursor.getString(7));
+                    results.add(movie);
+                    cursor.moveToNext();
+                }
+            }
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+    }
+
+    private void loadFromURL(URL requestUrl) throws JSONException, IOException {
         JSONObject jsonObject = new JSONObject(NetworkUtils.getResponseFromHttpUrl(requestUrl));
         JSONArray array = (JSONArray) jsonObject.get(getContext().getString(R.string.response_results));
         for (int i = 0; i < array.length(); i++) {
@@ -101,7 +138,6 @@ public class MovieTask extends AsyncTaskLoader<ArrayList<MovieResult>> {
 
             results.add(movieResult);
         }
-
     }
 
     public void deliverResult(ArrayList<MovieResult> results) {

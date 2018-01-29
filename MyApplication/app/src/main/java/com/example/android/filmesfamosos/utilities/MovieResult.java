@@ -17,8 +17,8 @@ public class MovieResult implements Parcelable {
     private String posterPath;
     private String releaseDate;
     private String overview;
-    private List<TrailerResult> trailers;
-    private List<ReviewResult> reviews;
+    private String trailers;
+    private String reviews;
 
 
     public MovieResult(String originalTitle, int id, String voteAverage, String posterPath, String releaseDate, String overview ) {
@@ -38,8 +38,8 @@ public class MovieResult implements Parcelable {
         this.posterPath = in.readString();
         this.releaseDate = in.readString();
         this.overview = in.readString();
-        this.setTrailers(in.readArrayList(TrailerResult.class.getClassLoader()));
-        this.setReviews(in.readArrayList(ReviewResult.class.getClassLoader()));
+        this.setTrailers(in.readString());
+        this.setReviews(in.readString());
     }
 
     @Override
@@ -55,8 +55,8 @@ public class MovieResult implements Parcelable {
         dest.writeString(posterPath);
         dest.writeString(releaseDate);
         dest.writeString(overview);
-        dest.writeList(getTrailers());
-        dest.writeList(getReviews());
+        dest.writeString(getTrailers());
+        dest.writeString(getReviews());
     }
 
 
@@ -96,20 +96,20 @@ public class MovieResult implements Parcelable {
         return overview;
     }
 
-    public List<TrailerResult> getTrailers() {
+    public String getTrailers() {
         return trailers;
     }
 
-    public List<ReviewResult> getReviews() {
+    public String getReviews() {
         return reviews;
     }
 
 
-    public void setTrailers(List<TrailerResult> trailers) {
+    public void setTrailers(String trailers) {
         this.trailers = trailers;
     }
 
-    public void setReviews(List<ReviewResult> reviews) {
+    public void setReviews(String reviews) {
         this.reviews = reviews;
     }
 }
