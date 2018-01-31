@@ -3,7 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/review_item">
-
     <TextView
         android:id="@+id/review_author"
         android:layout_width="match_parent"
@@ -11,9 +10,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:textSize="20sp"
-        />
-
+        android:textSize="20sp" />
     <TextView
         android:id="@+id/review_content"
         android:layout_width="match_parent"
@@ -21,7 +18,5 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:textSize="15sp"
-        />
-
+        android:textSize="15sp" />
 </LinearLayout>

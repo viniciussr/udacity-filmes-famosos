@@ -35,6 +35,7 @@ import java.util.List;
 public class DetailActivity extends AppCompatActivity {
 
     private MovieResult movieResult;
+    private static final String URL_TRAILER_YOUTUBE = "https://www.youtube.com/watch?v=%s";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,14 +119,13 @@ public class DetailActivity extends AppCompatActivity {
             View trailerView = inflater.inflate(R.layout.trailer_film, null);
             ((ImageView) trailerView.findViewById(R.id.trailer_button)).setImageResource(R.drawable.play_btn);
             ((TextView) trailerView.findViewById(R.id.trailer_title)).setText(jsonObject.getString(getString(R.string.trailers_name)));
-            final String trailerID = jsonObject.getString(getString(R.string.trailers_id));
+            final String trailerKey = jsonObject.getString(getString(R.string.trailers_key));
             trailerView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailerID));
+                    Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailerKey));
                     Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(R.string.youtube_link + trailerID));
-
+                            Uri.parse(String.format(getString(R.string.youtube_link), trailerKey)));
                     try {
                         startActivity(youTubeIntent);
                     } catch (ActivityNotFoundException ex) {
@@ -174,7 +174,6 @@ public class DetailActivity extends AppCompatActivity {
         ContentResolver resolver = getContentResolver();
         Cursor cursor = null;
         try {
-            System.out.println( " URI :" + uri.toString());
             cursor = resolver.query(uri, null, null, null, null);
             if (cursor != null && cursor.moveToFirst())
                 return true;
@@ -188,7 +187,6 @@ public class DetailActivity extends AppCompatActivity {
     private void toggleFavorite(ImageButton favorite){
 
         boolean inFavorites = checkFavorites();
-        System.out.println( " ACHOU FILME :" + inFavorites);
         favorite.setSelected(inFavorites);
     }
 }

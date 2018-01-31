@@ -3,8 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/trailer_list"
-    >
+    android:id="@+id/trailer_list">
     <TextView
         android:id="@+id/line_black"
         android:layout_width="match_parent"
@@ -12,8 +11,7 @@
         android:background="@drawable/border_dark"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-         />
+        android:layout_marginRight="15dp" />
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -22,9 +20,5 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:textSize="20sp"
-        />
-
-
-
+        android:textSize="20sp" />
 </LinearLayout>

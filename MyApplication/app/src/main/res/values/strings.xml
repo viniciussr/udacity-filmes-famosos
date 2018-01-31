@@ -23,7 +23,7 @@
 
     <string name="movie_review">Movie Reviews:</string>
     <string name="movie_trailer">Movie Trailers:</string>
-    <string name="youtube_link">http://www.youtube.com/watch?v=</string>
+    <string name="youtube_link">https://www.youtube.com/watch?v=%s</string>
 
     <!--PATH URI MOVIE-->
     <string name="path_popular" translatable="false">popular</string>

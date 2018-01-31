@@ -16,6 +16,7 @@
         android:paddingTop="20dp"
         android:paddingRight="20dp"
         android:paddingLeft="16dp"
+        android:contentDescription="@string/favorites"
         />
 
     <TextView

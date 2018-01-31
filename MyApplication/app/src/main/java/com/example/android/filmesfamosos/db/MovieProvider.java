@@ -19,6 +19,7 @@ public class MovieProvider extends ContentProvider {
 
     public static final int CODE_MOVIE = 100;
     public static final int CODE_MOVIE_ID = 101;
+    private static final String UNKNOWN_URI = "Unknown uri: ";
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -42,8 +43,6 @@ public class MovieProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         Cursor cursor;
 
-        System.out.println( "  URI MATCHER :" + sUriMatcher.toString());
-        System.out.println( "  URI :" + uri);
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         switch (sUriMatcher.match(uri)){
             case CODE_MOVIE_ID:
@@ -58,7 +57,7 @@ public class MovieProvider extends ContentProvider {
                 cursor = builder.query(movieDbHelper.getReadableDatabase(),projection,selection,selectionArgs, null,null,sortOrder);
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(UNKNOWN_URI + uri);
         }
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -94,7 +93,7 @@ public class MovieProvider extends ContentProvider {
                     }
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(UNKNOWN_URI + uri);
 
         }
         getContext().getContentResolver().notifyChange(uri, null);
@@ -111,7 +110,7 @@ public class MovieProvider extends ContentProvider {
                 rowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(UNKNOWN_URI + uri);
         }
 
         if (rowsDeleted != 0) {

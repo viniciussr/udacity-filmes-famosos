@@ -126,23 +126,28 @@ public class MainActivity extends AppCompatActivity implements
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        switch (id){
-            case R.id.most_popular:
-                invalidateData();
-                getSupportLoaderManager().restartLoader(FILM_MOST_POPULAR_LOADER_ID, null, this);
-                return true;
-            case R.id.top_rated:
-                invalidateData();
-                getSupportLoaderManager().restartLoader(FILM_TOP_RATED_LOADER_ID, null, this);
-                return true;
-            case R.id.favorites:
-                invalidateData();
-                getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, null, this);
-                return true;
-
-        }
-
+            switch (id){
+                case R.id.most_popular:
+                    if (isOnline()) {
+                        invalidateData();
+                        getSupportLoaderManager().restartLoader(FILM_MOST_POPULAR_LOADER_ID, null, this);
+                        return true;
+                    }else{
+                        showErrorMessage();
+                    }
+                case R.id.top_rated:
+                    if (isOnline()) {
+                        invalidateData();
+                        getSupportLoaderManager().restartLoader(FILM_TOP_RATED_LOADER_ID, null, this);
+                        return true;
+                    }else{
+                        showErrorMessage();
+                    }
+                case R.id.favorites:
+                    invalidateData();
+                    getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, null, this);
+                    return true;
+            }
         return super.onOptionsItemSelected(item);
     }
 
