@@ -69,7 +69,7 @@ public class MovieTask extends AsyncTaskLoader<ArrayList<MovieResult>> {
     }
 
     @NonNull
-    private MovieResult parseMovieResult(JSONObject jsonMovieObject, List<TrailerResult> trailers, List<ReviewResult> reviews) throws JSONException {
+    private MovieResult parseMovieResult(JSONObject jsonMovieObject) throws JSONException {
         return new MovieResult(
                 jsonMovieObject.getString(getContext().getString(R.string.response_title)),
                 Integer.parseInt(jsonMovieObject.getString(getContext().getString(R.string.response_id))),
@@ -128,7 +128,7 @@ public class MovieTask extends AsyncTaskLoader<ArrayList<MovieResult>> {
         for (int i = 0; i < array.length(); i++) {
             JSONObject jsonMovieObject = array.getJSONObject(i);
 
-            MovieResult movieResult = parseMovieResult(jsonMovieObject,null, null);
+            MovieResult movieResult = parseMovieResult(jsonMovieObject);
 
             ReviewTask reviewTask = new ReviewTask(getContext(),movieResult);
             reviewTask.execute();

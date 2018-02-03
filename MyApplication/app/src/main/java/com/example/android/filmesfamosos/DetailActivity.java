@@ -35,7 +35,6 @@ import java.util.List;
 public class DetailActivity extends AppCompatActivity {
 
     private MovieResult movieResult;
-    private static final String URL_TRAILER_YOUTUBE = "https://www.youtube.com/watch?v=%s";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
